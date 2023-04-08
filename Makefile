@@ -21,5 +21,5 @@ migrate_down:
 migrate_fix: 
 	migrate -path database/migrations/ -database ${POSTGRES} force 1
 
-drop_schema: migrate_fix
+drop_schema: migrate_down
 	psql ${POSTGRES} -c 'DROP SCHEMA IF EXISTS ${schema_name} CASCADE;'
