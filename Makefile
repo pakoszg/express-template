@@ -1,10 +1,15 @@
-POSTGRES+="postgresql://postgres:postgres@localhost:5111/postgres?sslmode=disable"
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
+POSTGRES+="postgresql://postgres:${PGPASSWORD}@localhost:5111/postgres?sslmode=disable"
 
 schema_name=new_gold
-create_sql='CREATE SCHEMA ${schema_name};'
+create_sql='CREATE SCHEMA ${schema_name}';
 
 create_shema: 
-	psql ${POSTGRES} -c 'CREATE SCHEMA ${schema_name};'
+	psql ${POSTGRES} -c ${create_sql}
 
 migrate_up: create_shema
 	migrate -path database/migrations/ -database ${POSTGRES} -verbose up
