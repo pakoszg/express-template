@@ -14,14 +14,14 @@ type HTTPErrorCode =
 
 export class HTTPError extends Error {
   public code: HTTPErrorCode;
-  public status: HttpStatusCode;
+  public statusCode: HttpStatusCode;
   public message: string;
   public isOperational: boolean;
 
   constructor(
     code?: HTTPErrorCode,
     message?: string,
-    status?: HttpStatusCode,
+    statusCode?: HttpStatusCode,
     isOperational?: boolean
   ) {
     super(message);
@@ -29,24 +29,28 @@ export class HTTPError extends Error {
 
     this.code = code || "internal_server_error";
     this.message = message || "Internal server error.";
-    this.status = status || HttpStatusCode.INTERNAL_SERVER_ERROR;
+    this.statusCode = statusCode || HttpStatusCode.INTERNAL_SERVER_ERROR;
     this.isOperational = isOperational || false;
 
-    Error.captureStackTrace(this);
+    // Error.captureStackTrace(this);
   }
+}
+
+export interface IHTTPError extends Partial<Error> {
+  status?: "error";
+  code?: string;
+  message: string;
+  statusCode?: number;
 }
 
 const errorMiddleware =
   (): ErrorRequestHandler =>
-  async (
-    err: HTTPError,
-    req: Request,
-    res: Response,
-    _: NextFunction
-  ): Promise<Response> => {
-    let errorObject: Partial<HTTPError> = {
+  async (err: IHTTPError, req: Request, res: Response, _: NextFunction) => {
+    let errorObject: IHTTPError = {
+      status: "error",
       code: "bad_request",
-      status: HttpStatusCode.INTERNAL_SERVER_ERROR,
+      message: "Internal server error.",
+      statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR,
     };
 
     if (err.code) {
@@ -54,7 +58,7 @@ const errorMiddleware =
       errorObject.message = err.message;
       errorObject.status = err.status;
 
-      return res.status(err.status).send(errorObject);
+      return res.status(err.statusCode || 400).send(errorObject);
     }
     return res.status(500).send(errorObject);
   };
