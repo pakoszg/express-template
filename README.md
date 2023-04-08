@@ -8,7 +8,8 @@ with postgREST and postgreSQL
 3. Run `npm run start` from the /express dir to start the server
 
 To test it, create a user by pasting the following cURL to the terminal:
-```curl --request POST \
+```
+curl --request POST \
   --url http://localhost:8000/user/create \
   --header 'Content-Type: application/json' \
   --data '{
