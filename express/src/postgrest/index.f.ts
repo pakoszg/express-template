@@ -3,6 +3,7 @@ import { Response as NodeFetchResponse } from "node-fetch";
 import jwt from "jsonwebtoken";
 
 import { postgrestUrl, postgrestJwtSecret } from "../config";
+import { HTTPError } from "../error";
 
 export const POSTGREST_JSON_HEADERS = [
   "application/json",
@@ -44,11 +45,11 @@ const postgrest = async ({
       },
     });
   } catch {
-    throw new Error();
+    throw new HTTPError("bad_request");
   }
 
-  if (response.status >= 400) {
-    throw new Error(await response.text());
+  if (response.status >= 300) {
+    throw new HTTPError("bad_request", await response.text());
   } else {
     return response.text();
   }

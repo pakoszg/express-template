@@ -1,11 +1,6 @@
-import express, {
-  NextFunction,
-  Request,
-  Response,
-  RequestHandler,
-} from "express";
+import express from "express";
 import createUser from "../https/user/createUser.f";
-import { asyncHandler } from "..";
+import { asyncHandler } from "../handlers";
 
 const router = express.Router();
 

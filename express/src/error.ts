@@ -32,7 +32,7 @@ export class HTTPError extends Error {
     this.statusCode = statusCode || HttpStatusCode.INTERNAL_SERVER_ERROR;
     this.isOperational = isOperational || false;
 
-    // Error.captureStackTrace(this);
+    Error.captureStackTrace(this);
   }
 }
 
