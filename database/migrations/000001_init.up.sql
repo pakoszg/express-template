@@ -2,15 +2,17 @@ BEGIN;
 
 SET search_path = public, new_gold;
 
+DROP ROLE IF EXISTS postgrest_anon, postgrest_authenticator, postgrest_user;
+
 CREATE ROLE postgrest_authenticator noinherit LOGIN PASSWORD 'qwerty12345';
-GRANT usage ON SCHEMA new_gold TO postgrest_authenticator;
+GRANT USAGE ON SCHEMA new_gold TO postgrest_authenticator;
 
 CREATE ROLE postgrest_anon nologin;
-GRANT usage ON SCHEMA new_gold TO postgrest_anon;
+GRANT USAGE ON SCHEMA new_gold TO postgrest_anon;
 GRANT postgrest_anon TO postgrest_authenticator;
 
 CREATE ROLE postgrest_user nologin;
-GRANT usage ON SCHEMA new_gold TO postgrest_user;
+GRANT USAGE ON SCHEMA new_gold TO postgrest_user;
 GRANT postgrest_user TO postgrest_authenticator;
 
 CREATE TABLE new_gold.users (
