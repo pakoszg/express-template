@@ -5,7 +5,7 @@ with postgREST and postgreSQL
 
 1. Run `docker compose up` from the /docker directory
 2. Run `make migrate_up` from /root to set up a schema and migrations
-3. Run `npm run start` from the /express dir to start the server
+3. Run `ts-node src/index.ts` from the /express dir to start the server
 
 To test it, create a user by pasting the following cURL to the terminal:
 ```
